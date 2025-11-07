@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class KillTouch : MonoBehaviour
 {
+   
+   
+   
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -16,5 +19,5 @@ public class KillTouch : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name, LoadSceneMode.Single);
     }
-
 }
+
