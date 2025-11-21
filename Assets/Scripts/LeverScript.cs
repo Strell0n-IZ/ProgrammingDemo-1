@@ -1,56 +1,63 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Events;
-
+ 
 public class LeverScript : MonoBehaviour
 {
-    public bool _leverStatus;
-    public Animator _anim;
-    [SerializeField] public UnityEvent _event;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private bool isLeverTrue;
+ 
+    [Header("Lever"),SerializeField] private Transform leverTransform;
+ 
+    [SerializeField] Vector3 leverTrueRotation,
+                                leverFalseRotation;
+    private Quaternion leverTargetRotation;
+ 
+    [SerializeField] private float leverLerpSpeed;
+ 
+ 
+    [Header("Gate"), SerializeField] private Transform gateTransform;
+ 
+    [SerializeField] Vector3 gateTruePosition,
+                                gateFalsePosition;
+    private Vector3 gateTargetPosition;
+ 
+    [SerializeField] private float gateLerpSpeed;
+ 
     void Start()
     {
-        _anim = GetComponent<Animator>();
+        SetLeverState(true); // Here, we are setting the default state of the lever
     }
-
+ 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    public void SwapInteract()
-    {
-        _leverStatus = !_leverStatus;
-        Debug.Log(_leverStatus + " Lever");            
-        _anim.SetBool("LeverStatus", _leverStatus);
-
-        //_event.Invoke();
-        //_leverStatus = !_leverStatus;
-
-
-
-        /*if (_leverStatus == false)
+        if (Input.GetKeyDown(KeyCode.Y))
         {
-            Debug.Log(_leverStatus);            
-            _anim.SetBool("LeverStatus", true);
-            _event.Invoke();
-            _leverStatus = !_leverStatus;
+            SwapLeverState();
         }
-
-        else if (_leverStatus == true)
-        {
-            Debug.Log(_leverStatus);
-            _anim.SetBool("LeverStatus", false);
-            
-            _leverStatus = !_leverStatus;
-        }*/
+ 
+        leverTransform.localRotation = Quaternion.Slerp(leverTransform.localRotation, leverTargetRotation, leverLerpSpeed * Time.deltaTime);
+        gateTransform.localPosition = Vector3.Lerp(gateTransform.localPosition, gateTargetPosition, gateLerpSpeed * Time.deltaTime);
     }
-
-     /*void IInteractable.interact()
+ 
+    public void SetLeverState(bool leverState)
     {
-        interact();
-    }*/
+        if (leverState)
+        {
+            leverTargetRotation.eulerAngles = leverTrueRotation;
+            gateTargetPosition = gateTruePosition;
+        }
+        else
+        {
+            leverTargetRotation.eulerAngles = leverFalseRotation;
+            gateTargetPosition = gateFalsePosition;
+        }
+    }
+ 
+    public void SwapLeverState()
+    {
+        isLeverTrue = !isLeverTrue;
+ 
+        SetLeverState(isLeverTrue);
+    }
 }
+ 
+ 

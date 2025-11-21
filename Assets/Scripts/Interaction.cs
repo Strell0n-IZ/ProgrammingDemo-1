@@ -28,11 +28,11 @@ public class Interaction : MonoBehaviour
         {
             RaycastHit hit;
             // Does the ray intersect any objects excluding the player layer
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Range))
+            if (Physics.Raycast(InteractorSource.position, transform.TransformDirection(Vector3.forward), out hit, Range))
             {
                 if (hit.collider.TryGetComponent<LeverScript>(out LeverScript lever))
                 {
-                    lever.SwapInteract();
+                    lever.SwapLeverState();
                 }
             }
 
